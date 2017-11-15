@@ -1,0 +1,32 @@
+#!/usr/bin/env sh
+
+target_dir="${HOME}/.myshell"
+
+#if [ ! -d $target_dir ]
+#then
+#    mkdir $target_dir
+#fi
+
+mkdir -p $target_dir
+
+for file in *.sh
+do
+    target_name=${file%.sh}
+    echo "cp $file -> $target_dir/$target_name"
+    cp $file $target_dir/$target_name
+done
+
+path_append='PATH=$PATH:'$target_dir
+
+cp ${HOME}/.bashrc ${HOME}/.bashrc_back
+
+res=$(grep $path_append ${HOME}/.bashrc)
+
+if [ -z $res ]
+then
+    echo "Append to ${HOME}/.bashrc : $path_append"
+
+    echo $path_append >> ${HOME}/.bashrc
+fi
+
+echo "end."
